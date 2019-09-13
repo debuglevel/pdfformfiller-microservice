@@ -124,6 +124,9 @@ dependencies {
     // Swagger / OpenAPI
     kapt "io.micronaut.configuration:micronaut-openapi"
     implementation "io.swagger.core.v3:swagger-annotations"
+
+    // OpenPDF
+    implementation 'com.github.librepdf:openpdf:1.3.8'
 }
 
 // Java configuration

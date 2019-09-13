@@ -11,4 +11,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'greeter-microservice'
+rootProject.name = 'pdfformfiller-microservice'

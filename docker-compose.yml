@@ -2,7 +2,7 @@ version: '3'
 services:
   rest:
     build: .
-    image: greeter-microservice
+    image: pdfformfiller-microservice
     ports:
       - "80:80"
     environment:
