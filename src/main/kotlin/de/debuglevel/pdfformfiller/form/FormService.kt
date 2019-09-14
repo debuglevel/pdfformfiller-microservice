@@ -7,7 +7,8 @@ import javax.inject.Singleton
 
 @Singleton
 class FormService(
-    private val formRepository: FormRepository
+    private val formRepository: FormRepository,
+    private val pdfValidator: PdfValidator
 ) {
     private val logger = KotlinLogging.logger {}
 
@@ -22,6 +23,10 @@ class FormService(
 
     fun save(form: Form): Form {
         logger.debug { "Saving form '$form'..." }
+
+        if (!pdfValidator.validate(form.pdf)) {
+            throw InvalidPdfException()
+        }
 
         form.creationDateTime = LocalDateTime.now()
         val savedForm = formRepository.save(form)
@@ -41,4 +46,7 @@ class FormService(
     }
 
     class FormNotFoundException(uuid: UUID) : Exception("No form found with ID '$uuid'")
+    class InvalidPdfException : Exception("File is not a valid PDF")
 }
+
+

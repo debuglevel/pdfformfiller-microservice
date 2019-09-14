@@ -47,6 +47,7 @@ class FormController(private val formService: FormService) {
             name = formRequest.name,
             pdf = Base64.getDecoder().decode(formRequest.pdf)
         )
+        // TODO: this can throw a InvalidPdfException; should be handled appropriately
         val savedForm = formService.save(form)
         return FormResponse(
             id = savedForm.id,
