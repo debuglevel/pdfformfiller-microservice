@@ -16,6 +16,11 @@ class MergeController(private val merger: OpenpdfMerger) {
     //       For persistence and lower memory consumption, data should be stored in a persistent database
     private val resultPdfStorage = mutableMapOf<UUID, ByteArray>()
 
+    /**
+     * @implNote This is implemented in a blocking way, because the merge operation is usually really fast (~10ms), and
+     *           an asynchronous design would just add overhead without real benefit. When there are really big PDFs or
+     *           many PDFs, an asynchronous design with a worker queue might be reasonable.
+     */
     @Post("/")
     fun postOne(mergeRequest: MergeRequest): HttpResponse<MergeResponse> {
         logger.debug("Called postOne($mergeRequest)")
