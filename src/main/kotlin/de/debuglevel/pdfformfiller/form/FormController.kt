@@ -19,7 +19,7 @@ class FormController(private val formService: FormService) {
         return formService.getList()
             .map {
                 FormResponse(
-                    uuid = it.id,
+                    id = it.id,
                     creationDateTime = it.creationDateTime,
                     name = it.name,
                     pdf = null
@@ -33,7 +33,7 @@ class FormController(private val formService: FormService) {
         logger.debug("Called getOne($uuid)")
         val form = formService.retrieve(UUID.fromString(uuid))
         return FormResponse(
-            uuid = form.id,
+            id = form.id,
             name = form.name,
             creationDateTime = form.creationDateTime,
             pdf = Base64.getEncoder().encodeToString(form.pdf)
@@ -49,7 +49,7 @@ class FormController(private val formService: FormService) {
         )
         val savedForm = formService.save(form)
         return FormResponse(
-            uuid = savedForm.id,
+            id = savedForm.id,
             name = savedForm.name,
             pdf = Base64.getEncoder().encodeToString(savedForm.pdf),
             creationDateTime = savedForm.creationDateTime
