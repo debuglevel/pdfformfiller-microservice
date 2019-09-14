@@ -14,6 +14,7 @@ data class Form(
     var id: UUID? = null,
     var name: String,
     var creationDateTime: LocalDateTime? = null,
+    var modificationDateTime: LocalDateTime? = null,
     @Lob
     var pdf: ByteArray
 )

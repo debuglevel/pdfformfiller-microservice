@@ -21,7 +21,7 @@ class FormService(
         return form
     }
 
-    fun save(form: Form): Form {
+    fun add(form: Form): Form {
         logger.debug { "Saving form '$form'..." }
 
         if (!pdfValidator.validate(form.pdf)) {
@@ -29,9 +29,29 @@ class FormService(
         }
 
         form.creationDateTime = LocalDateTime.now()
-        val savedForm = formRepository.save(form)
+        form.modificationDateTime = LocalDateTime.now()
+        val addedForm = formRepository.save(form)
 
-        logger.debug { "Saved form: $savedForm" }
+        logger.debug { "Saved form: $addedForm" }
+        return form
+    }
+
+    fun update(uuid: UUID, form: Form): Form {
+        logger.debug { "Updating form '$form'..." }
+
+        if (!pdfValidator.validate(form.pdf)) {
+            throw InvalidPdfException()
+        }
+
+        val existingForm = this.retrieve(uuid).apply {
+            modificationDateTime = LocalDateTime.now()
+            name = form.name
+            pdf = form.pdf
+        }
+
+        val updatedForm = formRepository.save(existingForm)
+
+        logger.debug { "Updated form: $updatedForm" }
         return form
     }
 
