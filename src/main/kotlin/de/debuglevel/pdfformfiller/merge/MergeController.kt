@@ -1,5 +1,6 @@
 package de.debuglevel.pdfformfiller.merge
 
+import de.debuglevel.pdfformfiller.form.FormService
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
@@ -7,12 +8,16 @@ import io.micronaut.http.annotation.Post
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
 import mu.KotlinLogging
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.util.*
 
 @Secured(SecurityRule.IS_AUTHENTICATED)
 @Controller("/merges")
-class MergeController(private val merger: OpenpdfMerger) {
+class MergeController(
+    private val merger: OpenpdfMerger,
+    private val formService: FormService
+) {
     private val logger = KotlinLogging.logger {}
 
     // TODO: For now, this is a simple map; i.e. an in-memory database
@@ -29,7 +34,7 @@ class MergeController(private val merger: OpenpdfMerger) {
         logger.debug("Called postOne($mergeRequest)")
 
         return run {
-            val pdf = Base64.getDecoder().decode(mergeRequest.pdf).inputStream()
+            val pdf = getPdf(mergeRequest)
             val data = convertFieldsToMap(mergeRequest.data)
             val resultPdf = ByteArrayOutputStream()
             merger.merge(pdf, data, resultPdf)
@@ -39,6 +44,19 @@ class MergeController(private val merger: OpenpdfMerger) {
 
             val mergeResponse = MergeResponse(uuid)
             HttpResponse.created(mergeResponse)
+        }
+    }
+
+    private fun getPdf(mergeRequest: MergeRequest): ByteArrayInputStream {
+        return if (!mergeRequest.pdfId.isNullOrBlank()) {
+            logger.debug { "Using existing form with UUID '${mergeRequest.pdfId}'..." }
+            val uuid = UUID.fromString(mergeRequest.pdfId)
+            formService.retrieve(uuid).pdf.inputStream()
+        } else if (!mergeRequest.pdf.isNullOrBlank()) {
+            logger.debug { "Using form embedded in request..." }
+            Base64.getDecoder().decode(mergeRequest.pdf).inputStream()
+        } else {
+            throw MissingPdfException()
         }
     }
 
@@ -65,4 +83,6 @@ class MergeController(private val merger: OpenpdfMerger) {
         logger.trace { "Converted data to map: $map" }
         return map.toMap()
     }
+
+    class MissingPdfException : Exception("Neither 'pdf' nor 'pdfId' was given.")
 }
