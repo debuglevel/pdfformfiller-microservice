@@ -126,6 +126,7 @@ dependencies {
     implementation "io.swagger.core.v3:swagger-annotations"
 
     // OpenPDF
+    // TODO: update to 1.3.9 as soon as it's ready to fix scrambled values in the "producer" metadata
     implementation 'com.github.librepdf:openpdf:1.3.8'
 }
 
