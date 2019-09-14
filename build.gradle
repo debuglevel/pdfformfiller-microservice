@@ -53,12 +53,10 @@ mainClassName = "de.debuglevel.pdfformfiller.Application"
 
 repositories {
     jcenter()
-    maven {
-        url "https://dl.bintray.com/debuglevel/maven"
-    }
-    maven {
-        url "https://jitpack.io"
-    }
+//    mavenLocal()
+//    maven {
+//        url "https://jitpack.io"
+//    }
 }
 
 dependencies {
