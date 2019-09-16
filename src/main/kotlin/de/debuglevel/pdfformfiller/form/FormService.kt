@@ -52,7 +52,7 @@ class FormService(
         val updatedForm = formRepository.save(existingForm)
 
         logger.debug { "Updated form: $updatedForm" }
-        return form
+        return updatedForm
     }
 
     fun getList(): Set<Form> {

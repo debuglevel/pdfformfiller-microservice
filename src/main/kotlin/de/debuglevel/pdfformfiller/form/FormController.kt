@@ -51,12 +51,13 @@ class FormController(private val formService: FormService) {
         )
         // TODO: this can throw a InvalidPdfException; should be handled appropriately
         val savedForm = formService.update(uuid, form)
-        return FormResponse(
+        val formResponse = FormResponse(
             id = savedForm.id,
             name = savedForm.name,
             pdf = Base64.getEncoder().encodeToString(savedForm.pdf),
             creationDateTime = savedForm.creationDateTime
         )
+        return formResponse
     }
 
     @Post("/")

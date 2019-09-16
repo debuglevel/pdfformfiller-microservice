@@ -17,6 +17,7 @@ class PdfValidator {
             val pdfReader = PdfReader(pdf)
             pdfReader.numberOfPages > 0
         } catch (e: Exception) {
+            logger.debug(e) { "Validating PDF failed while parsing PDF" }
             false
         }
 
