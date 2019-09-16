@@ -49,10 +49,9 @@ class MergeController(
     }
 
     private fun getPdf(mergeRequest: MergeRequest): ByteArrayInputStream {
-        return if (!mergeRequest.pdfId.isNullOrBlank()) {
+        return if (mergeRequest.pdfId != null) {
             logger.debug { "Using existing form with UUID '${mergeRequest.pdfId}'..." }
-            val uuid = UUID.fromString(mergeRequest.pdfId)
-            formService.retrieve(uuid).pdf.inputStream()
+            formService.retrieve(mergeRequest.pdfId).pdf.inputStream()
         } else if (!mergeRequest.pdf.isNullOrBlank()) {
             logger.debug { "Using form embedded in request..." }
             Base64.getDecoder().decode(mergeRequest.pdf).inputStream()
@@ -63,17 +62,17 @@ class MergeController(
 
     @Get("/{uuid}")
     @Produces("application/pdf")
-    fun getOne(uuid: String): HttpResponse<ByteArray> {
+    fun getOne(uuid: UUID): HttpResponse<ByteArray> {
         logger.debug("Called getOne($uuid)")
-        return HttpResponse.ok(resultPdfStorage[UUID.fromString(uuid)])
+        return HttpResponse.ok(resultPdfStorage[uuid])
     }
 
-    private fun convertFieldsToMap(data: String): Map<String, String> {
-        logger.trace { "Converting data to map..." }
-        logger.trace { "Using data: $data" }
+    private fun convertFieldsToMap(values: String): Map<String, String> {
+        logger.trace { "Converting values-String to map..." }
+        logger.trace { "Using values-String: $values" }
         val map = mutableMapOf<String, String>()
 
-        data.lines()
+        values.lines()
             .map { line ->
                 run {
                     logger.trace { "Converting line '$line'..." }
@@ -82,7 +81,7 @@ class MergeController(
                 }
             }
 
-        logger.trace { "Converted data to map: $map" }
+        logger.trace { "Converted values-String to map: $map" }
         return map.toMap()
     }
 
