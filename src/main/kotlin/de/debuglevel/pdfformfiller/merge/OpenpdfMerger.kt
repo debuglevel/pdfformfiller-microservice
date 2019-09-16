@@ -13,7 +13,7 @@ class OpenpdfMerger : Merger {
 
     override fun merge(
         pdf: InputStream,
-        data: Map<String, String>,
+        values: Map<String, String>,
         resultPdf: OutputStream,
         flatten: Boolean
     ) {
@@ -24,7 +24,7 @@ class OpenpdfMerger : Merger {
 
         // fill in form values
         val form = pdfStamper.acroFields
-        data.forEach { (key, value) ->
+        values.forEach { (key, value) ->
             run {
                 logger.debug { "Setting field '$key'='$value'" }
                 form.setField(key, value)

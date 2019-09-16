@@ -2,7 +2,6 @@ package de.debuglevel.pdfformfiller.merge
 
 import de.debuglevel.pdfformfiller.form.FormService
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
@@ -37,7 +36,7 @@ class MergeController(
 
         return run {
             val pdf = getPdf(mergeRequest)
-            val data = convertFieldsToMap(mergeRequest.data)
+            val data = convertFieldsToMap(mergeRequest.values)
             val resultPdf = ByteArrayOutputStream()
             merger.merge(pdf, data, resultPdf)
 
