@@ -2,9 +2,11 @@ package de.debuglevel.pdfformfiller.merge
 
 import de.debuglevel.pdfformfiller.form.FormService
 import io.micronaut.http.HttpResponse
+import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.Produces
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
 import mu.KotlinLogging
@@ -61,6 +63,7 @@ class MergeController(
     }
 
     @Get("/{uuid}")
+    @Produces("application/pdf")
     fun getOne(uuid: String): HttpResponse<ByteArray> {
         logger.debug("Called getOne($uuid)")
         return HttpResponse.ok(resultPdfStorage[UUID.fromString(uuid)])
