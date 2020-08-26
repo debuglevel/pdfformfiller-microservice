@@ -21,7 +21,12 @@
         <appender-ref ref="STDOUT"/>
     </root>
 
+    <!-- loglevels should be configured via application.yml or corresponding environment variables, as this is way more flexible in productive use -->
+    <!--
     <logger name="io.micronaut.http.server" level="DEBUG"/>
     <logger name="io.micronaut.data.query" level="DEBUG"/>
     <logger name="de.debuglevel" level="DEBUG"/>
+    -->
+    <!-- Log infos about loading conditional beans -->
+    <!-- <logger name="io.micronaut.context.condition" level="DEBUG"/> -->
 </configuration>
