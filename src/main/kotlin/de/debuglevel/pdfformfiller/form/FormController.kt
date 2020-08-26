@@ -29,10 +29,10 @@ class FormController(private val formService: FormService) {
             .toSet()
     }
 
-    @Get("/{uuid}")
-    fun getOne(uuid: String): FormResponse? {
-        logger.debug("Called getOne($uuid)")
-        val form = formService.retrieve(UUID.fromString(uuid))
+    @Get("/{id}")
+    fun getOne(id: String): FormResponse? {
+        logger.debug("Called getOne($id)")
+        val form = formService.retrieve(UUID.fromString(id))
         return FormResponse(
             id = form.id,
             name = form.name,
@@ -42,15 +42,15 @@ class FormController(private val formService: FormService) {
     }
 
     // TODO: fails due to: Unexpected error occurred: org.hibernate.PersistentObjectException: detached entity passed to persist: de.debuglevel.pdfformfiller.form.Form
-    @Put("/{uuid}")
-    fun putOne(uuid: UUID, formRequest: FormRequest): FormResponse {
-        logger.debug("Called putOne($uuid, $formRequest)")
+    @Put("/{id}")
+    fun putOne(id: UUID, formRequest: FormRequest): FormResponse {
+        logger.debug("Called putOne($id, $formRequest)")
         val form = Form(
             name = formRequest.name,
             pdf = Base64.getDecoder().decode(formRequest.pdf)
         )
         // TODO: this can throw a InvalidPdfException; should be handled appropriately
-        val savedForm = formService.update(uuid, form)
+        val savedForm = formService.update(id, form)
         val formResponse = FormResponse(
             id = savedForm.id,
             name = savedForm.name,

@@ -31,12 +31,12 @@ class FieldController(
         }
     }
 
-    @Get("/{uuid}")
-    fun getOne(uuid: UUID): HttpResponse<FieldResponse> {
-        logger.debug("Called getOne($uuid)")
+    @Get("/{id}")
+    fun getOne(id: UUID): HttpResponse<FieldResponse> {
+        logger.debug("Called getOne($id)")
 
         return run {
-            val pdf = formService.retrieve(uuid).pdf.inputStream()
+            val pdf = formService.retrieve(id).pdf.inputStream()
             val fields = fieldFinder.getFields(pdf)
             val fieldResponse = FieldResponse(fields)
 

@@ -40,17 +40,17 @@ class MergeController(
             val resultPdf = ByteArrayOutputStream()
             merger.merge(pdf, data, resultPdf)
 
-            val uuid = UUID.randomUUID()
-            resultPdfStorage[uuid] = resultPdf.toByteArray()
+            val id = UUID.randomUUID()
+            resultPdfStorage[id] = resultPdf.toByteArray()
 
-            val mergeResponse = MergeResponse(uuid)
+            val mergeResponse = MergeResponse(id)
             HttpResponse.created(mergeResponse)
         }
     }
 
     private fun getPdf(mergeRequest: MergeRequest): ByteArrayInputStream {
         return if (mergeRequest.pdfId != null) {
-            logger.debug { "Using existing form with UUID '${mergeRequest.pdfId}'..." }
+            logger.debug { "Using existing form with ID '${mergeRequest.pdfId}'..." }
             formService.retrieve(mergeRequest.pdfId).pdf.inputStream()
         } else if (!mergeRequest.pdf.isNullOrBlank()) {
             logger.debug { "Using form embedded in request..." }
@@ -60,11 +60,11 @@ class MergeController(
         }
     }
 
-    @Get("/{uuid}")
+    @Get("/{id}")
     @Produces("application/pdf")
-    fun getOne(uuid: UUID): HttpResponse<ByteArray> {
-        logger.debug("Called getOne($uuid)")
-        return HttpResponse.ok(resultPdfStorage[uuid])
+    fun getOne(id: UUID): HttpResponse<ByteArray> {
+        logger.debug("Called getOne($id)")
+        return HttpResponse.ok(resultPdfStorage[id])
     }
 
     private fun convertFieldsToMap(values: String): Map<String, String> {

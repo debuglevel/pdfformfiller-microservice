@@ -33,7 +33,7 @@ $ curl -X POST -d @upload.json -H "Content-Type: application/json" -H "Accept: a
 ```
 
 ### Get merged PDF
-To get the merged PDF file, request the `"uuid"` via GET: 
+To get the merged PDF file, request the `"id"` via GET: 
 ```shell script
 $ curl -X GET -H "Content-Type: application/json" http://localhost:8080/merges/7821fad7-46c0-4b3b-8667-c076eaf12b2d > output.pdf
 ```

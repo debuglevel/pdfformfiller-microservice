@@ -12,12 +12,12 @@ class FormService(
 ) {
     private val logger = KotlinLogging.logger {}
 
-    fun retrieve(uuid: UUID): Form {
-        logger.debug { "Getting form with ID '$uuid'..." }
+    fun retrieve(id: UUID): Form {
+        logger.debug { "Getting form with ID '$id'..." }
 
-        val form: Form = formRepository.findById(uuid).orElseThrow { FormNotFoundException(uuid) }
+        val form: Form = formRepository.findById(id).orElseThrow { FormNotFoundException(id) }
 
-        logger.debug { "Got form with ID '$uuid': $form" }
+        logger.debug { "Got form with ID '$id': $form" }
         return form
     }
 
@@ -36,14 +36,14 @@ class FormService(
         return form
     }
 
-    fun update(uuid: UUID, form: Form): Form {
+    fun update(id: UUID, form: Form): Form {
         logger.debug { "Updating form '$form'..." }
 
         if (!pdfValidator.validate(form.pdf)) {
             throw InvalidPdfException()
         }
 
-        val existingForm = this.retrieve(uuid).apply {
+        val existingForm = this.retrieve(id).apply {
             modificationDateTime = LocalDateTime.now()
             name = form.name
             pdf = form.pdf
@@ -65,7 +65,7 @@ class FormService(
         return forms
     }
 
-    class FormNotFoundException(uuid: UUID) : Exception("No form found with ID '$uuid'")
+    class FormNotFoundException(id: UUID) : Exception("No form found with ID '$id'")
     class InvalidPdfException : Exception("File is not a valid PDF")
 }
 
