@@ -76,6 +76,11 @@ class MergeController(
             .map { line ->
                 run {
                     logger.trace { "Converting line '$line'..." }
+
+                    if (!line.contains("=")) {
+                        throw InvalidValueLineException(line)
+                    }
+
                     val splits = line.split('=', limit = 2)
                     map[splits[0]] = splits[1]
                 }
@@ -86,4 +91,5 @@ class MergeController(
     }
 
     class MissingPdfException : Exception("Neither 'pdf' nor 'pdfId' was given.")
+    class InvalidValueLineException(line: String) : Exception("The following line does not contain a '=': '$line'")
 }
