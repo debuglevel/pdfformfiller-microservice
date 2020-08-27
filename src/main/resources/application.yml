@@ -11,7 +11,7 @@ micronaut:
     instance:
       id: ${random.shortuuid} # instance ID should be set random if Consul registration is active to avoid collisions (default ID would be the port number)
   server:
-    port: 8080 # default: -1 (random port)
+    port: 8082 # default: -1 (random port)
     cors:
     #  enabled: true # default: false
   router:
@@ -23,7 +23,7 @@ micronaut:
         paths: classpath:META-INF/swagger
         mapping: /swagger/**
   security:
-#    enabled: true # default: false
+    enabled: false # default: false
 #  http:
 #    services: # manual service discovery
 #      foo: # service ID
