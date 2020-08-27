@@ -16,7 +16,7 @@ class FormRepositoryTests {
     @Test
     fun `updating an item works at all`() {
         // Arrange
-        val form = Form(name = "Test", pdf = "xyz".toByteArray())
+        val form = Form(id = null, name = "Test", pdf = "xyz".toByteArray())
         val savedForm = repository.save(form)
 
         // Act

@@ -21,13 +21,16 @@ class FormControllerTests {
 
         // Arrange
         val form =
-            FormRequest(name = "Test", pdf = Base64.getEncoder().encodeToString(PdfUtils.getMinimalPdf().toByteArray()))
+            AddFormRequest(
+                name = "Test",
+                pdf = Base64.getEncoder().encodeToString(PdfUtils.getMinimalPdf().toByteArray())
+            )
         val addedForm = controller.postOne(form)
 
         // Act
-        val retrievedForm = controller.getOne(addedForm.id!!).body()
+        val retrievedForm = controller.getOne(addedForm.id).body()
 
-        val updateForm = FormRequest(
+        val updateForm = AddFormRequest(
             name = "Test2",
             pdf = Base64.getEncoder().encodeToString(PdfUtils.getMinimalPdf().toByteArray())
         )
@@ -35,7 +38,7 @@ class FormControllerTests {
         val updatedForm = controller.putOne(retrievedForm?.id!!, updateForm)
 
         // Assert
-        val retrieved2Form = controller.getOne(updatedForm.id!!).body()
+        val retrieved2Form = controller.getOne(updatedForm.id).body()
         assertThat(retrieved2Form?.name).isEqualTo("Test2")
     }
 }

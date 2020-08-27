@@ -28,8 +28,8 @@ class FormService(
             throw InvalidPdfException()
         }
 
-        form.creationDateTime = LocalDateTime.now()
-        form.modificationDateTime = LocalDateTime.now()
+        form.createdOn = LocalDateTime.now()
+        form.lastModified = LocalDateTime.now()
         val addedForm = formRepository.save(form)
 
         logger.debug { "Saved form: $addedForm" }
@@ -44,7 +44,7 @@ class FormService(
         }
 
         val existingForm = this.retrieve(id).apply {
-            modificationDateTime = LocalDateTime.now()
+            lastModified = LocalDateTime.now()
             name = form.name
             pdf = form.pdf
         }

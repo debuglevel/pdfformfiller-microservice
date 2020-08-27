@@ -21,10 +21,11 @@ class FormController(private val formService: FormService) {
         return formService.getList()
             .map {
                 FormResponse(
-                    id = it.id,
-                    creationDateTime = it.creationDateTime,
+                    id = it.id!!,
                     name = it.name,
-                    pdf = null
+                    pdf = null,
+                    createdOn = it.createdOn,
+                    lastModified = it.lastModified,
                 )
             }
             .toSet()
@@ -37,10 +38,11 @@ class FormController(private val formService: FormService) {
             val form = formService.retrieve(id)
 
             val formResponse = FormResponse(
-                id = form.id,
+                id = form.id!!,
                 name = form.name,
-                creationDateTime = form.creationDateTime,
-                pdf = Base64.getEncoder().encodeToString(form.pdf)
+                pdf = Base64.getEncoder().encodeToString(form.pdf),
+                createdOn = form.createdOn,
+                lastModified = form.lastModified
             )
 
             HttpResponse.ok(formResponse)
@@ -54,37 +56,41 @@ class FormController(private val formService: FormService) {
 
     // TODO: fails due to: Unexpected error occurred: org.hibernate.PersistentObjectException: detached entity passed to persist: de.debuglevel.pdfformfiller.form.Form
     @Put("/{id}")
-    fun putOne(id: UUID, formRequest: FormRequest): FormResponse {
-        logger.debug("Called putOne($id, $formRequest)")
+    fun putOne(id: UUID, addFormRequest: AddFormRequest): FormResponse {
+        logger.debug("Called putOne($id, $addFormRequest)")
         val form = Form(
-            name = formRequest.name,
-            pdf = Base64.getDecoder().decode(formRequest.pdf)
+            id = null,
+            name = addFormRequest.name,
+            pdf = Base64.getDecoder().decode(addFormRequest.pdf)
         )
         // TODO: this can throw a InvalidPdfException; should be handled appropriately
         val savedForm = formService.update(id, form)
         val formResponse = FormResponse(
-            id = savedForm.id,
+            id = savedForm.id!!,
             name = savedForm.name,
             pdf = Base64.getEncoder().encodeToString(savedForm.pdf),
-            creationDateTime = savedForm.creationDateTime
+            createdOn = savedForm.createdOn,
+            lastModified = savedForm.lastModified
         )
         return formResponse
     }
 
     @Post("/")
-    fun postOne(formRequest: FormRequest): FormResponse {
-        logger.debug("Called postOne($formRequest)")
+    fun postOne(addFormRequest: AddFormRequest): FormResponse {
+        logger.debug("Called postOne($addFormRequest)")
         val form = Form(
-            name = formRequest.name,
-            pdf = Base64.getDecoder().decode(formRequest.pdf)
+            id = null,
+            name = addFormRequest.name,
+            pdf = Base64.getDecoder().decode(addFormRequest.pdf)
         )
         // TODO: this can throw a InvalidPdfException; should be handled appropriately
         val savedForm = formService.add(form)
         return FormResponse(
-            id = savedForm.id,
+            id = savedForm.id!!,
             name = savedForm.name,
             pdf = Base64.getEncoder().encodeToString(savedForm.pdf),
-            creationDateTime = savedForm.creationDateTime
+            createdOn = savedForm.createdOn,
+            lastModified = savedForm.lastModified,
         )
     }
 }

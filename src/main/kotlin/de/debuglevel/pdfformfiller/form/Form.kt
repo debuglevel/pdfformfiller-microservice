@@ -1,5 +1,7 @@
 package de.debuglevel.pdfformfiller.form
 
+import io.micronaut.data.annotation.DateCreated
+import io.micronaut.data.annotation.DateUpdated
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.Entity
@@ -11,10 +13,12 @@ import javax.persistence.Lob
 data class Form(
     @Id
     @GeneratedValue
-    var id: UUID? = null,
+    var id: UUID?,
     var name: String,
-    var creationDateTime: LocalDateTime? = null,
-    var modificationDateTime: LocalDateTime? = null,
     @Lob
-    var pdf: ByteArray
+    var pdf: ByteArray,
+    @DateCreated
+    var createdOn: LocalDateTime = LocalDateTime.now(),
+    @DateUpdated
+    var lastModified: LocalDateTime = LocalDateTime.now(),
 )

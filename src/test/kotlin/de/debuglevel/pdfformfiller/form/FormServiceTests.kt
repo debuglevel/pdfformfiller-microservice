@@ -19,7 +19,7 @@ class FormServiceTests {
         //println("'${PdfUtils.getMinimalPdf()}'")
 
         // Arrange
-        val form = Form(name = "Test", pdf = PdfUtils.getMinimalPdf().toByteArray())
+        val form = Form(id = null, name = "Test", pdf = PdfUtils.getMinimalPdf().toByteArray())
         val addedForm = service.add(form)
 
         // Act
