@@ -1,5 +1,6 @@
 package de.debuglevel.pdfformfiller.form
 
+import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
@@ -30,15 +31,25 @@ class FormController(private val formService: FormService) {
     }
 
     @Get("/{id}")
-    fun getOne(id: String): FormResponse? {
+    fun getOne(id: UUID): HttpResponse<FormResponse> {
         logger.debug("Called getOne($id)")
-        val form = formService.retrieve(UUID.fromString(id))
-        return FormResponse(
-            id = form.id,
-            name = form.name,
-            creationDateTime = form.creationDateTime,
-            pdf = Base64.getEncoder().encodeToString(form.pdf)
-        )
+        return try {
+            val form = formService.retrieve(id)
+
+            val formResponse = FormResponse(
+                id = form.id,
+                name = form.name,
+                creationDateTime = form.creationDateTime,
+                pdf = Base64.getEncoder().encodeToString(form.pdf)
+            )
+
+            HttpResponse.ok(formResponse)
+        } catch (e: FormService.FormNotFoundException) {
+            HttpResponse.notFound<FormResponse>()
+        } catch (e: Exception) {
+            logger.error(e) { "Unhandled exception" }
+            HttpResponse.serverError<FormResponse>()
+        }
     }
 
     // TODO: fails due to: Unexpected error occurred: org.hibernate.PersistentObjectException: detached entity passed to persist: de.debuglevel.pdfformfiller.form.Form
