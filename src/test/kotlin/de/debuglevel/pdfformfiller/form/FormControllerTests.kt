@@ -25,7 +25,7 @@ class FormControllerTests {
                 name = "Test",
                 pdf = Base64.getEncoder().encodeToString(PdfUtils.getMinimalPdf().toByteArray())
             )
-        val addedForm = controller.postOne(form)
+        val addedForm = controller.postOne(form).body() as FormResponse
 
         // Act
         val retrievedForm = controller.getOne(addedForm.id).body()

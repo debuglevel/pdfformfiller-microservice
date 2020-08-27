@@ -76,21 +76,33 @@ class FormController(private val formService: FormService) {
     }
 
     @Post("/")
-    fun postOne(addFormRequest: AddFormRequest): FormResponse {
+    fun postOne(addFormRequest: AddFormRequest): HttpResponse<*> {
         logger.debug("Called postOne($addFormRequest)")
-        val form = Form(
-            id = null,
-            name = addFormRequest.name,
-            pdf = Base64.getDecoder().decode(addFormRequest.pdf)
-        )
-        // TODO: this can throw a InvalidPdfException; should be handled appropriately
-        val savedForm = formService.add(form)
-        return FormResponse(
-            id = savedForm.id!!,
-            name = savedForm.name,
-            pdf = Base64.getEncoder().encodeToString(savedForm.pdf),
-            createdOn = savedForm.createdOn,
-            lastModified = savedForm.lastModified,
-        )
+        return try {
+            val form = Form(
+                id = null,
+                name = addFormRequest.name,
+                pdf = Base64.getDecoder().decode(addFormRequest.pdf)
+            )
+
+            val savedForm = formService.add(form)
+
+            val formResponse = FormResponse(
+                id = savedForm.id!!,
+                name = savedForm.name,
+                pdf = Base64.getEncoder().encodeToString(savedForm.pdf),
+                createdOn = savedForm.createdOn,
+                lastModified = savedForm.lastModified,
+            )
+
+            HttpResponse.created(formResponse)
+        } catch (e: FormService.FormNotFoundException) {
+            HttpResponse.notFound<FormResponse>()
+        } catch (e: FormService.InvalidPdfException) {
+            HttpResponse.badRequest<String>("The given PDF is invalid.")
+        } catch (e: Exception) {
+            logger.error(e) { "Unhandled exception" }
+            HttpResponse.serverError<String>("Unhandled exception: " + e.stackTrace)
+        }
     }
 }
