@@ -24,7 +24,7 @@ class OpenpdfMergerTests {
         val inputStream = testForm.pdfPath.toFile().inputStream()
         val values = testForm.fields.associateBy({ it }, { "$it Value" })
         val outputStream = ByteArrayOutputStream()
-        val flatten = true
+        val flatten = true // PdfTextExtractor does not find text on flatten = false
 
         // Act
         service.merge(inputStream, values, outputStream, flatten)
