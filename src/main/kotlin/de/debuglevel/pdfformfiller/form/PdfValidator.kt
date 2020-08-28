@@ -15,9 +15,11 @@ class PdfValidator {
         logger.debug { "Validating PDF..." }
         val isValidPdf = try {
             val pdfReader = PdfReader(pdf)
-            pdfReader.numberOfPages > 0
+            val isValid = pdfReader.numberOfPages > 0
+            logger.debug { "Parsing PDF worked with ${pdfReader.numberOfPages} pages; assuming PDF is valid: $isValid" }
+            isValid
         } catch (e: Exception) {
-            logger.debug(e) { "Validating PDF failed while parsing PDF" }
+            logger.debug(e) { "Parsing PDF failed; assuming PDF is not valid." }
             false
         }
 
