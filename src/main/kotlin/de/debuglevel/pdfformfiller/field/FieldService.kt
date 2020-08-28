@@ -6,7 +6,7 @@ import java.io.InputStream
 import javax.inject.Singleton
 
 @Singleton
-class FieldFinder {
+class FieldService {
     private val logger = KotlinLogging.logger {}
 
     fun getFields(pdf: InputStream): List<String> {

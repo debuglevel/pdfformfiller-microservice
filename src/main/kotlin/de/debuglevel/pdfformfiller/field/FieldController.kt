@@ -13,7 +13,7 @@ import java.util.*
 @Secured(SecurityRule.IS_AUTHENTICATED)
 @Controller("/fields")
 class FieldController(
-    private val fieldFinder: FieldFinder,
+    private val fieldService: FieldService,
     private val formService: FormService
 ) {
     private val logger = KotlinLogging.logger {}
@@ -24,7 +24,7 @@ class FieldController(
 
         return run {
             val pdf = Base64.getDecoder().decode(fieldRequest.pdf).inputStream()
-            val fields = fieldFinder.getFields(pdf)
+            val fields = fieldService.getFields(pdf)
             val fieldResponse = FieldResponse(fields)
 
             HttpResponse.ok(fieldResponse)
@@ -37,7 +37,7 @@ class FieldController(
 
         return run {
             val pdf = formService.retrieve(id).pdf.inputStream()
-            val fields = fieldFinder.getFields(pdf)
+            val fields = fieldService.getFields(pdf)
             val fieldResponse = FieldResponse(fields)
 
             HttpResponse.ok(fieldResponse)
