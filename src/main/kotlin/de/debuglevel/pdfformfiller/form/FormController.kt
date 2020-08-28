@@ -16,23 +16,30 @@ class FormController(private val formService: FormService) {
     private val logger = KotlinLogging.logger {}
 
     @Get("/")
-    fun getList(): Set<FormResponse> {
+    fun getList(): HttpResponse<*> {
         logger.debug("Called getList()")
-        return formService.getList()
-            .map {
-                FormResponse(
-                    id = it.id!!,
-                    name = it.name,
-                    pdf = null,
-                    createdOn = it.createdOn,
-                    lastModified = it.lastModified,
-                )
-            }
-            .toSet()
+
+        return try {
+            val formResponses = formService.getList()
+                .map {
+                    FormResponse(
+                        id = it.id!!,
+                        name = it.name,
+                        pdf = null,
+                        createdOn = it.createdOn,
+                        lastModified = it.lastModified,
+                    )
+                }
+                .toSet()
+            HttpResponse.ok(formResponses)
+        } catch (e: Exception) {
+            logger.error(e) { "Unhandled exception" }
+            HttpResponse.serverError("Unhandled exception: " + e.stackTrace)
+        }
     }
 
     @Get("/{id}")
-    fun getOne(id: UUID): HttpResponse<FormResponse> {
+    fun getOne(id: UUID): HttpResponse<*> {
         logger.debug("Called getOne($id)")
         return try {
             val form = formService.retrieve(id)
@@ -47,10 +54,10 @@ class FormController(private val formService: FormService) {
 
             HttpResponse.ok(formResponse)
         } catch (e: FormService.FormNotFoundException) {
-            HttpResponse.notFound<FormResponse>()
+            HttpResponse.notFound("Form $id not found.")
         } catch (e: Exception) {
             logger.error(e) { "Unhandled exception" }
-            HttpResponse.serverError<FormResponse>()
+            HttpResponse.serverError("Unhandled exception: " + e.stackTrace)
         }
     }
 
@@ -96,13 +103,11 @@ class FormController(private val formService: FormService) {
             )
 
             HttpResponse.created(formResponse)
-        } catch (e: FormService.FormNotFoundException) {
-            HttpResponse.notFound<FormResponse>()
         } catch (e: FormService.InvalidPdfException) {
-            HttpResponse.badRequest<String>("The given PDF is invalid.")
+            HttpResponse.badRequest("The given PDF is invalid.")
         } catch (e: Exception) {
             logger.error(e) { "Unhandled exception" }
-            HttpResponse.serverError<String>("Unhandled exception: " + e.stackTrace)
+            HttpResponse.serverError("Unhandled exception: " + e.stackTrace)
         }
     }
 }
