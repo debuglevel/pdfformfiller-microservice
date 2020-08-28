@@ -21,10 +21,9 @@ class PdfValidatorTest {
     fun `validate valid PDFs`(testForm: TestDataProvider.TestForm) {
         // Arrange
         val inputStream = testForm.pdfPath.toFile().inputStream()
-        val bytes = inputStream.readBytes()
 
         // Act
-        val isValid = service.validate(bytes)
+        val isValid = service.validate(inputStream)
 
         // Assert
         Assertions.assertThat(isValid).isTrue
@@ -34,10 +33,9 @@ class PdfValidatorTest {
     fun `validate invalid PDFs`() {
         // Arrange
         val inputStream = "foobar".byteInputStream()
-        val bytes = inputStream.readBytes()
 
         // Act
-        val isValid = service.validate(bytes)
+        val isValid = service.validate(inputStream)
 
         // Assert
         Assertions.assertThat(isValid).isFalse

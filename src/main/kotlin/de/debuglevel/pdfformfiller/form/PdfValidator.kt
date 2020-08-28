@@ -2,6 +2,7 @@ package de.debuglevel.pdfformfiller.form
 
 import com.lowagie.text.pdf.PdfReader
 import mu.KotlinLogging
+import java.io.InputStream
 import javax.inject.Singleton
 
 @Singleton
@@ -11,7 +12,7 @@ class PdfValidator {
     /**
      * @implNote: Probably not the very best PDF validation check, but should catch the worst cases
      */
-    fun validate(pdf: ByteArray): Boolean {
+    fun validate(pdf: InputStream): Boolean {
         logger.debug { "Validating PDF..." }
         val isValidPdf = try {
             val pdfReader = PdfReader(pdf)

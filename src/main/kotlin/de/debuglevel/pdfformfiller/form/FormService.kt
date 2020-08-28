@@ -24,7 +24,7 @@ class FormService(
     fun add(form: Form): Form {
         logger.debug { "Saving form '$form'..." }
 
-        if (!pdfValidator.validate(form.pdf)) {
+        if (!pdfValidator.validate(form.pdf.inputStream())) {
             throw InvalidPdfException()
         }
 
@@ -39,7 +39,7 @@ class FormService(
     fun update(id: UUID, form: Form): Form {
         logger.debug { "Updating form '$form'..." }
 
-        if (!pdfValidator.validate(form.pdf)) {
+        if (!pdfValidator.validate(form.pdf.inputStream())) {
             throw InvalidPdfException()
         }
 
