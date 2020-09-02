@@ -51,7 +51,7 @@ class MergeController(
     private fun getPdf(mergeRequest: MergeRequest): ByteArrayInputStream {
         return if (mergeRequest.pdfId != null) {
             logger.debug { "Using existing form with ID '${mergeRequest.pdfId}'..." }
-            formService.retrieve(mergeRequest.pdfId).pdf.inputStream()
+            formService.get(mergeRequest.pdfId).pdf.inputStream()
         } else if (!mergeRequest.pdf.isNullOrBlank()) {
             logger.debug { "Using form embedded in request..." }
             Base64.getDecoder().decode(mergeRequest.pdf).inputStream()

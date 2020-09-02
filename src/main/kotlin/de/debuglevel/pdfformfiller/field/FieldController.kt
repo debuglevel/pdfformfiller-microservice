@@ -36,7 +36,7 @@ class FieldController(
         logger.debug("Called getOne($id)")
 
         return run {
-            val pdf = formService.retrieve(id).pdf.inputStream()
+            val pdf = formService.get(id).pdf.inputStream()
             val fields = fieldService.getFields(pdf)
             val fieldResponse = FieldResponse(fields)
 

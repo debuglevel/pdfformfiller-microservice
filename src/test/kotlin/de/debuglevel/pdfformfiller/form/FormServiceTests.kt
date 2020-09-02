@@ -23,12 +23,12 @@ class FormServiceTests {
         val addedForm = service.add(form)
 
         // Act
-        val retrievedForm = service.retrieve(addedForm.id!!)
+        val retrievedForm = service.get(addedForm.id!!)
         retrievedForm.name = "Test2"
         val updatedForm = service.update(retrievedForm.id!!, retrievedForm)
 
         // Assert
-        val retrieved2Form = service.retrieve(addedForm.id!!)
+        val retrieved2Form = service.get(addedForm.id!!)
         assertThat(retrieved2Form.name).isEqualTo("Test2")
     }
 }

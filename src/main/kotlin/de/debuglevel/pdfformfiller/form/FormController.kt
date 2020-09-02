@@ -42,7 +42,7 @@ class FormController(private val formService: FormService) {
     fun getOne(id: UUID): HttpResponse<*> {
         logger.debug("Called getOne($id)")
         return try {
-            val form = formService.retrieve(id)
+            val form = formService.get(id)
 
             val formResponse = FormResponse(
                 id = form.id!!,

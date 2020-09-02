@@ -11,7 +11,7 @@ class FormService(
 ) {
     private val logger = KotlinLogging.logger {}
 
-    fun retrieve(id: UUID): Form {
+    fun get(id: UUID): Form {
         logger.debug { "Getting form with ID '$id'..." }
 
         val form: Form = formRepository.findById(id).orElseThrow { FormNotFoundException(id) }
@@ -40,7 +40,7 @@ class FormService(
             throw InvalidPdfException()
         }
 
-        val existingForm = this.retrieve(id).apply {
+        val existingForm = this.get(id).apply {
             name = form.name
             pdf = form.pdf
         }
