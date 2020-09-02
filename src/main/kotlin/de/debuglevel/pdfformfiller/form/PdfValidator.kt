@@ -20,7 +20,7 @@ class PdfValidator {
             logger.debug { "Parsing PDF worked with ${pdfReader.numberOfPages} pages; assuming PDF is valid: $isValid" }
             isValid
         } catch (e: Exception) {
-            logger.debug(e) { "Parsing PDF failed; assuming PDF is not valid." }
+            logger.debug { "Parsing PDF failed; assuming PDF is not valid: ${e.stackTrace}" }
             false
         }
 
