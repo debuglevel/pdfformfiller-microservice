@@ -21,15 +21,7 @@ class FormController(private val formService: FormService) {
 
         return try {
             val formResponses = formService.getList()
-                .map {
-                    FormResponse(
-                        id = it.id!!,
-                        name = it.name,
-                        pdf = null,
-                        createdOn = it.createdOn,
-                        lastModified = it.lastModified,
-                    )
-                }
+                .map { FormResponse(it).copy(pdf = null) } // do not send PDF content when requesting a list of all forms
                 .toSet()
             HttpResponse.ok(formResponses)
         } catch (e: Exception) {
