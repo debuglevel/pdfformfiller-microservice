@@ -42,16 +42,9 @@ class FormController(private val formService: FormService) {
     fun getOne(id: UUID): HttpResponse<*> {
         logger.debug("Called getOne($id)")
         return try {
-            val form = formService.get(id)
+            val getForm = formService.get(id)
 
-            val formResponse = FormResponse(
-                id = form.id!!,
-                name = form.name,
-                pdf = Base64.getEncoder().encodeToString(form.pdf),
-                createdOn = form.createdOn,
-                lastModified = form.lastModified
-            )
-
+            val formResponse = FormResponse(getForm)
             HttpResponse.ok(formResponse)
         } catch (e: FormService.FormNotFoundException) {
             HttpResponse.notFound("Form $id not found.")
@@ -97,14 +90,7 @@ class FormController(private val formService: FormService) {
 
             val savedForm = formService.add(form)
 
-            val formResponse = FormResponse(
-                id = savedForm.id!!,
-                name = savedForm.name,
-                pdf = Base64.getEncoder().encodeToString(savedForm.pdf),
-                createdOn = savedForm.createdOn,
-                lastModified = savedForm.lastModified,
-            )
-
+            val formResponse = FormResponse(savedForm)
             HttpResponse.created(formResponse)
         } catch (e: FormService.InvalidPdfException) {
             HttpResponse.badRequest("The given PDF is invalid.")
