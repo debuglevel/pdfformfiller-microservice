@@ -1,7 +1,6 @@
 package de.debuglevel.pdfformfiller.form
 
 import mu.KotlinLogging
-import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Singleton
 
@@ -28,8 +27,6 @@ class FormService(
             throw InvalidPdfException()
         }
 
-        form.createdOn = LocalDateTime.now()
-        form.lastModified = LocalDateTime.now()
         val addedForm = formRepository.save(form)
 
         logger.debug { "Saved form: $addedForm" }
@@ -44,7 +41,6 @@ class FormService(
         }
 
         val existingForm = this.retrieve(id).apply {
-            lastModified = LocalDateTime.now()
             name = form.name
             pdf = form.pdf
         }
