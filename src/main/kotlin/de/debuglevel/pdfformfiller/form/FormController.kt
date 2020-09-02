@@ -61,25 +61,28 @@ class FormController(private val formService: FormService) {
         }
     }
 
-    // TODO: fails due to: Unexpected error occurred: org.hibernate.PersistentObjectException: detached entity passed to persist: de.debuglevel.pdfformfiller.form.Form
     @Put("/{id}")
-    fun putOne(id: UUID, addFormRequest: AddFormRequest): FormResponse {
-        logger.debug("Called putOne($id, $addFormRequest)")
-        val form = Form(
-            id = null,
-            name = addFormRequest.name,
-            pdf = Base64.getDecoder().decode(addFormRequest.pdf)
-        )
-        // TODO: this can throw a InvalidPdfException; should be handled appropriately
-        val savedForm = formService.update(id, form)
-        val formResponse = FormResponse(
-            id = savedForm.id!!,
-            name = savedForm.name,
-            pdf = Base64.getEncoder().encodeToString(savedForm.pdf),
-            createdOn = savedForm.createdOn,
-            lastModified = savedForm.lastModified
-        )
-        return formResponse
+    fun putOne(id: UUID, updateFormRequest: UpdateFormRequest): HttpResponse<*> {
+        logger.debug("Called putOne($id, $updateFormRequest)")
+        return try {
+            val form = Form(
+                id = null,
+                name = updateFormRequest.name,
+                pdf = Base64.getDecoder().decode(updateFormRequest.pdf)
+            )
+
+            val updatedForm = formService.update(id, form)
+
+            val formResponse = FormResponse(updatedForm)
+            HttpResponse.ok(formResponse)
+        } catch (e: FormService.FormNotFoundException) {
+            HttpResponse.notFound("Form $id not found.")
+        } catch (e: FormService.InvalidPdfException) {
+            HttpResponse.badRequest("The given PDF is invalid.")
+        } catch (e: Exception) {
+            logger.error(e) { "Unhandled exception" }
+            HttpResponse.serverError("Unhandled exception: " + e.stackTrace)
+        }
     }
 
     @Post("/")

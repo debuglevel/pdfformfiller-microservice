@@ -34,7 +34,7 @@ class FormService(
     }
 
     fun update(id: UUID, form: Form): Form {
-        logger.debug { "Updating form '$form'..." }
+        logger.debug { "Updating form '$form' with ID $id..." }
 
         if (!pdfValidator.validate(form.pdf.inputStream())) {
             throw InvalidPdfException()
@@ -45,9 +45,9 @@ class FormService(
             pdf = form.pdf
         }
 
-        val updatedForm = formRepository.save(existingForm)
+        val updatedForm = formRepository.update(existingForm)
 
-        logger.debug { "Updated form: $updatedForm" }
+        logger.debug { "Updated form with ID $id: $updatedForm" }
         return updatedForm
     }
 
