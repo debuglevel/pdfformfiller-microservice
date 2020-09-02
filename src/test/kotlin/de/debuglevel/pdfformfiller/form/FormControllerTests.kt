@@ -30,12 +30,12 @@ class FormControllerTests {
         // Act
         val retrievedForm = controller.getOne(addedForm.id).body() as FormResponse
 
-        val updateForm = AddFormRequest(
+        val updateForm = UpdateFormRequest(
             name = "Test2",
             pdf = Base64.getEncoder().encodeToString(PdfUtils.getMinimalPdf().toByteArray())
         )
 
-        val updatedForm = controller.putOne(retrievedForm.id, updateForm)
+        val updatedForm = controller.putOne(retrievedForm.id, updateForm).body() as FormResponse
 
         // Assert
         val retrieved2Form = controller.getOne(updatedForm.id).body() as FormResponse
