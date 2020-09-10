@@ -1,7 +1,6 @@
 package de.debuglevel.pdfformfiller.merge
 
 import de.debuglevel.pdfformfiller.form.FormService
-import de.debuglevel.pdfmergefiller.merge.MergeService
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
 import io.micronaut.security.annotation.Secured

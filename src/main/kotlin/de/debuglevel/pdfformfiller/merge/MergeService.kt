@@ -1,7 +1,5 @@
-package de.debuglevel.pdfmergefiller.merge
+package de.debuglevel.pdfformfiller.merge
 
-import de.debuglevel.pdfformfiller.merge.Merge
-import de.debuglevel.pdfformfiller.merge.MergeRepository
 import mu.KotlinLogging
 import java.util.*
 import javax.inject.Singleton
