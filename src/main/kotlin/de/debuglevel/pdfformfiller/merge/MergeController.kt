@@ -49,7 +49,7 @@ class MergeController(
             HttpResponse.badRequest("Form ${addMergeRequest.pdfId} not found.")
         } catch (e: Exception) {
             logger.error(e) { "Unhandled exception" }
-            HttpResponse.serverError("Unhandled exception: " + e.stackTrace)
+            HttpResponse.serverError("Unhandled exception: " + e.message)
         }
     }
 
@@ -77,7 +77,7 @@ class MergeController(
             HttpResponse.notFound("Merge $id not found.")
         } catch (e: Exception) {
             logger.error(e) { "Unhandled exception" }
-            HttpResponse.serverError("Unhandled exception: " + e.stackTrace)
+            HttpResponse.serverError("Unhandled exception: " + e.message)
         }
     }
 
@@ -92,7 +92,7 @@ class MergeController(
             HttpResponse.notFound("Merge $id not found.")
         } catch (e: Exception) {
             logger.error(e) { "Unhandled exception" }
-            HttpResponse.serverError("Unhandled exception: " + e.stackTrace)
+            HttpResponse.serverError("Unhandled exception: " + e.message)
         }
     }
 

@@ -26,7 +26,7 @@ class FormController(private val formService: FormService) {
             HttpResponse.ok(formResponses)
         } catch (e: Exception) {
             logger.error(e) { "Unhandled exception" }
-            HttpResponse.serverError("Unhandled exception: " + e.stackTrace)
+            HttpResponse.serverError("Unhandled exception: " + e.message)
         }
     }
 
@@ -42,7 +42,7 @@ class FormController(private val formService: FormService) {
             HttpResponse.notFound("Form $id not found.")
         } catch (e: Exception) {
             logger.error(e) { "Unhandled exception" }
-            HttpResponse.serverError("Unhandled exception: " + e.stackTrace)
+            HttpResponse.serverError("Unhandled exception: " + e.message)
         }
     }
 
@@ -66,7 +66,7 @@ class FormController(private val formService: FormService) {
             HttpResponse.badRequest("The given PDF is invalid.")
         } catch (e: Exception) {
             logger.error(e) { "Unhandled exception" }
-            HttpResponse.serverError("Unhandled exception: " + e.stackTrace)
+            HttpResponse.serverError("Unhandled exception: " + e.message)
         }
     }
 
@@ -88,7 +88,7 @@ class FormController(private val formService: FormService) {
             HttpResponse.badRequest("The given PDF is invalid.")
         } catch (e: Exception) {
             logger.error(e) { "Unhandled exception" }
-            HttpResponse.serverError("Unhandled exception: " + e.stackTrace)
+            HttpResponse.serverError("Unhandled exception: " + e.message)
         }
     }
 }
