@@ -53,7 +53,6 @@ class MergeService(
     }
 
     class MergeNotFoundException(id: UUID) : Exception("No merge found with ID '$id'")
-    class InvalidPdfException : Exception("File is not a valid PDF")
 }
 
 
