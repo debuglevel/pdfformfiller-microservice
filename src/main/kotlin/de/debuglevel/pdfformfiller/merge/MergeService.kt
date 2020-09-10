@@ -42,6 +42,16 @@ class MergeService(
         logger.debug { "Deleted merge with ID '$id'" }
     }
 
+    fun deleteAll() {
+        logger.debug { "Deleting all merges..." }
+
+        val countBefore = mergeRepository.count()
+        mergeRepository.deleteAll()
+        val countAfter = mergeRepository.count()
+
+        logger.debug { "Deleted ${countBefore - countAfter} of $countBefore merges, $countAfter remaining" }
+    }
+
     fun getList(): Set<Merge> {
         logger.debug { "Getting all merges..." }
 

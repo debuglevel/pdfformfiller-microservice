@@ -110,5 +110,18 @@ class MergeController(
         }
     }
 
+    @Delete("/")
+    fun deleteAll(): HttpResponse<*> {
+        logger.debug("Called deleteAll()")
+        return try {
+            mergeService.deleteAll()
+
+            HttpResponse.noContent<Any>()
+        } catch (e: Exception) {
+            logger.error(e) { "Unhandled exception" }
+            HttpResponse.serverError("Unhandled exception: " + e.message)
+        }
+    }
+
     class MissingPdfException : Exception("Neither 'pdf' nor 'pdfId' was given.")
 }
