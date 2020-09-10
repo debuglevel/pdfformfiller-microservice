@@ -5,5 +5,5 @@ import java.util.*
 data class AddMergeRequest(
     val pdf: String?,
     val pdfId: UUID?,
-    val values: String
+    val values: Map<String, String>
 )

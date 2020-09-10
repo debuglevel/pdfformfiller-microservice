@@ -30,9 +30,8 @@ class MergeController(
         logger.debug("Called postOne($addMergeRequest)")
         return try {
             val pdf = getPdf(addMergeRequest)
-            val data = convertFieldsToMap(addMergeRequest.values)
             val resultPdf = ByteArrayOutputStream()
-            merger.merge(pdf, data, resultPdf)
+            merger.merge(pdf, addMergeRequest.values, resultPdf)
 
             val merge = Merge(
                 id = null,
@@ -96,29 +95,5 @@ class MergeController(
         }
     }
 
-    private fun convertFieldsToMap(values: String): Map<String, String> {
-        logger.trace { "Converting values-String to map..." }
-        logger.trace { "Using values-String: $values" }
-        val map = mutableMapOf<String, String>()
-
-        values.lines()
-            .map { line ->
-                run {
-                    logger.trace { "Converting line '$line'..." }
-
-                    if (!line.contains("=")) {
-                        throw InvalidValueLineException(line)
-                    }
-
-                    val splits = line.split('=', limit = 2)
-                    map[splits[0]] = splits[1]
-                }
-            }
-
-        logger.trace { "Converted values-String to map: $map" }
-        return map.toMap()
-    }
-
     class MissingPdfException : Exception("Neither 'pdf' nor 'pdfId' was given.")
-    class InvalidValueLineException(line: String) : Exception("The following line does not contain a '=': '$line'")
 }

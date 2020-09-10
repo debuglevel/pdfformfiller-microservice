@@ -86,7 +86,10 @@ In this case, the request to `/merges` would include the `id` rather than the Ba
 ```json
 {
   "pdfId": "468db27f-0059-4c9a-9e28-dd0c78899262",
-  "values": "Textfeld 1=Hello\nTextfeld 2=World"
+  "values": { 
+    "Textfeld 1": "Hello",
+    "Textfeld 2": "World" 
+  }
 }
 ```
 
