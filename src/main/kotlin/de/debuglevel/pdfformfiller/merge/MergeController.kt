@@ -3,10 +3,7 @@ package de.debuglevel.pdfformfiller.merge
 import de.debuglevel.pdfformfiller.form.FormService
 import de.debuglevel.pdfmergefiller.merge.MergeService
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.annotation.Controller
-import io.micronaut.http.annotation.Get
-import io.micronaut.http.annotation.Post
-import io.micronaut.http.annotation.Produces
+import io.micronaut.http.annotation.*
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
 import mu.KotlinLogging
@@ -76,6 +73,21 @@ class MergeController(
             val getMerge = mergeService.get(id)
 
             HttpResponse.ok(getMerge.pdf)
+        } catch (e: MergeService.MergeNotFoundException) {
+            HttpResponse.notFound("Merge $id not found.")
+        } catch (e: Exception) {
+            logger.error(e) { "Unhandled exception" }
+            HttpResponse.serverError("Unhandled exception: " + e.stackTrace)
+        }
+    }
+
+    @Delete("/{id}")
+    fun deleteOne(id: UUID): HttpResponse<*> {
+        logger.debug("Called deleteOne($id)")
+        return try {
+            mergeService.delete(id)
+
+            HttpResponse.noContent<Any>()
         } catch (e: MergeService.MergeNotFoundException) {
             HttpResponse.notFound("Merge $id not found.")
         } catch (e: Exception) {

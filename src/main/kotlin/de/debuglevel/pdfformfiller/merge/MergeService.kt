@@ -30,6 +30,18 @@ class MergeService(
         return merge
     }
 
+    fun delete(id: UUID) {
+        logger.debug { "Deleting merge with ID '$id'..." }
+
+        if (mergeRepository.existsById(id)) {
+            mergeRepository.deleteById(id)
+        } else {
+            throw MergeNotFoundException(id)
+        }
+
+        logger.debug { "Deleted merge with ID '$id'" }
+    }
+
     fun getList(): Set<Merge> {
         logger.debug { "Getting all merges..." }
 
