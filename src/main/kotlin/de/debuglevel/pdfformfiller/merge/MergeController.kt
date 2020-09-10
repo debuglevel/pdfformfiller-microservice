@@ -80,6 +80,21 @@ class MergeController(
         }
     }
 
+    @Get("/")
+    fun getList(): HttpResponse<*> {
+        logger.debug("Called getList()")
+
+        return try {
+            val mergeResponses = mergeService.getList()
+                .map { GetMergeResponse(it) }
+                .toSet()
+            HttpResponse.ok(mergeResponses)
+        } catch (e: Exception) {
+            logger.error(e) { "Unhandled exception" }
+            HttpResponse.serverError("Unhandled exception: " + e.message)
+        }
+    }
+
     @Delete("/{id}")
     fun deleteOne(id: UUID): HttpResponse<*> {
         logger.debug("Called deleteOne($id)")
