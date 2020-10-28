@@ -32,7 +32,7 @@ class OpenpdfMergerTests {
         // Assert
         val bytes = outputStream.toByteArray()
         val text = PdfTextExtractor(PdfReader(bytes)).getTextFromPage(1)
-        // Assertions.assertThat(text).contains(values.values) // TODO: use this line when https://github.com/LibrePDF/OpenPDF/issues/119 is fixed
+        // Assertions.assertThat(text).contains(values.values) // TODO: use this line instead when OpenPDF 1.3.23 is released
         Assertions.assertThat(text).contains(values.values.map {
             it.replace(
                 " ",
