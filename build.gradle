@@ -146,9 +146,6 @@ dependencies {
     kapt "io.micronaut.configuration:micronaut-openapi"
     implementation "io.swagger.core.v3:swagger-annotations"
 
-
-    // OpenPDF
-    implementation 'com.github.librepdf:openpdf:1.3.20'
     // Micronaut Views
     //implementation "io.micronaut.views:micronaut-views-thymeleaf"
     //implementation "io.micronaut.views:micronaut-views-handlebars"
@@ -156,6 +153,9 @@ dependencies {
     //implementation "io.micronaut.views:micronaut-views-freemarker"
     //implementation "io.micronaut.views:micronaut-views-rocker"
     //implementation "io.micronaut.views:micronaut-views-soy"
+
+    // OpenPDF
+    implementation 'com.github.librepdf:openpdf:1.3.20'
 }
 
 // Java configuration
