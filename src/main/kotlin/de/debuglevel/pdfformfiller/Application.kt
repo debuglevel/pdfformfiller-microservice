@@ -30,7 +30,11 @@ object Application {
     @JvmStatic
     fun main(args: Array<String>) {
         logger.info { "Starting up..." }
-        applicationContext = Micronaut.run(Application.javaClass)
+        applicationContext = Micronaut
+            .build(*args)
+            .classes(Application.javaClass)
+            .banner(false)
+            .start()
     }
 }
 
